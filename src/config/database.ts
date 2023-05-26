@@ -11,9 +11,24 @@ const {
   MONGODB_DBNAME,
   MONGODB_USERNAME,
   MONGODB_PASSWORD,
+  MYSQL_PORT,
+  MYSQL_DBNAME,
+  MYSQL_USERNAME,
+  MYSQL_PASSWORD,
 } = process.env;
 
 const db = {
+  mysql: {
+    type: 'mysql',
+    host: 'localhost',
+    port: MYSQL_PORT,
+    username: MYSQL_USERNAME,
+    password: MYSQL_PASSWORD,
+    database: MYSQL_DBNAME,
+    autoLoadEntities: true,
+    synchronize: true,
+  },
+
   pgsql: {
     type: 'postgres',
     host: 'localhost',
