@@ -4,28 +4,28 @@ import {
   BeforeInsert,
   Column,
   Entity,
-  // PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn,
   Unique,
   CreateDateColumn,
   UpdateDateColumn,
-  ObjectIdColumn,
-  ObjectId,
+  // ObjectIdColumn,
+  // ObjectId,
   BeforeUpdate,
 } from 'typeorm';
 
 @Entity()
 export class User {
-  // @PrimaryGeneratedColumn()
-  // id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @ObjectIdColumn()
-  _id: ObjectId;
+  // @ObjectIdColumn()
+  // _id: ObjectId;
 
-  @Column()
+  @Column({ nullable: true })
   name: string;
 
   @Unique([])
-  @Column({ nullable: true })
+  @Column()
   phone: string;
 
   @Column()

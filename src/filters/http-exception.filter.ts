@@ -13,15 +13,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
 
-    const { message } = exception;
+    const exResp = exception.getResponse();
     const code = exception.getStatus() || 500;
 
+    const { message: exMsg } = exception || {};
+    const { message: exRespMsg = '' } = exResp || ({} as any);
+    const message = exRespMsg || exMsg;
+
     Logger.log('错误提示', message);
+
     const errorResponse = {
       code,
       message,
       data: null,
     };
+
     const status =
       exception instanceof HttpException
         ? exception.getStatus()

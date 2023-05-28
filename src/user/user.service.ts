@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { FindManyOptions, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ObjectId } from 'mongodb';
+// import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UserService {
@@ -31,18 +31,25 @@ export class UserService {
 
   async findAll() {
     return await this.userRepository.find({
-      select: ['_id', 'createDate', 'name', 'phone', 'updateDate'],
+      select: ['id', 'createDate', 'name', 'phone', 'updateDate'],
     });
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      select: ['id', 'createDate', 'name', 'phone', 'updateDate'],
+    });
+
+    if (!user) throw new NotFoundException('找不到该用户');
+
+    return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    const _id = new ObjectId(id);
-    const row = await this.userRepository.findOneBy({ _id });
-    if (!row) throw new NotFoundException('找不到改用户');
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    // const _id = new ObjectId(id);
+    const row = await this.userRepository.findOneBy({ id });
+    if (!row) throw new NotFoundException('找不到该用户');
 
     const updateUser = await this.userRepository.preload({
       ...row,
@@ -52,9 +59,9 @@ export class UserService {
     return await this.userRepository.save(updateUser);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} user`;
+  // }
 
   async getUser(query: object): Promise<User> {
     return this.userRepository.findOneBy(query);

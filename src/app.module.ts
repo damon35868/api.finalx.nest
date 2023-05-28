@@ -11,7 +11,6 @@ import { dbConfig } from './config/database';
   imports: [
     // 使用环境变量
     ConfigModule.forRoot({ isGlobal: true }),
-    // typeorm
     TypeOrmModule.forRoot(dbConfig),
     UserModule,
     AuthModule,
